@@ -14,6 +14,7 @@ using namespace pqxx;
 
 // Function to connect to the database
 connection* connect_db(string dbname, string user, string password) {
+    // Attempt to connect to the database. Any error is caught and safetly exits.
     try {
         connection *C = new connection("dbname = " + dbname + " user = " + user + " password = " + password + " hostaddr = 172.28.240.1 port = 5432");
         if (C->is_open()) {
@@ -124,29 +125,32 @@ void deleteStudent(connection *C) {
 }
 
 int main(int argc, char* argv[]) {
+    // Ensure the program is run with the correct number of arguments (arg[0] is the file name)
     if (argc != 4) {
         cerr << "Usage: " << argv[0] << " <dbname> <username> <password>" << endl;
         return 1;
     }
 
+    // Parse the args from the arg list
     string dbname = argv[1];
     string user = argv[2];
     string password = argv[3];
 
+    // Establish the connection
     connection* C = connect_db(dbname, user, password);
     if (C == nullptr) {
         return 1;
     }
 
+    // Input var used for menu
     string input;
-    cout << "Database Connection Established.\n" << endl;
 
     while (true) {
         cout <<
-            "\nSelect one of the following options:\n"
-            "1. Get all students / Prints the entire 'students' table\n"
+            "\n\nSelect from the list of options:\n"
+            "1. Get all students\n"
             "2. Add a new student\n"
-            "3. Update the email of a current student\n"
+            "3. Update email of a student\n"
             "4. Delete a student\n\n"
             "Enter 'exit' to exit the program.\n> ";
         getline(cin, input);
@@ -170,6 +174,7 @@ int main(int argc, char* argv[]) {
         }
     }
 
+    // Exiting program, cleanup
     C->disconnect();
     delete C;
     return 0;
