@@ -13,6 +13,8 @@ A simple C++ program that interfaces with a PostgreSQL database to perform CRUD 
 
 ## Compilation & Execution
 
+Initialize the database in pgAdmin using the supplied `initialize.sql` file.
+
 Use the following command to compile the application:
 
 ```bash
