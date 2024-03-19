@@ -2,7 +2,7 @@
 
 ## Overview
 
-A simple C++ program that interfaces with a PostgreSQL database to perform CRUD operations.
+A simple C++ program that interfaces with a PostgreSQL database to perform CRUD operations. Demo video: https://youtu.be/S6BGSoFSTR8
 
 ## Prerequisites
 
