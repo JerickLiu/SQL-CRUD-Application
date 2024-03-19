@@ -1,15 +1,16 @@
+/*
+COMP3005 - Assignment 3
+Jerick Liu
+101225819
+2024-03-18
+*/
+
 #include <iostream>
 #include <limits>
 #include <pqxx/pqxx>
 
 using namespace std;
 using namespace pqxx;
-
-connection* connect_db(string dbname, string user, string password);
-void getAllStudents(connection *C);
-void addStudent(connection *C);
-void updateStudentEmail(connection *C);
-void deleteStudent(connection *C);
 
 // Function to connect to the database
 connection* connect_db(string dbname, string user, string password) {
@@ -61,9 +62,16 @@ void addStudent(connection *C) {
     /* Format the SQL query */
     string sql = "INSERT INTO students (first_name, last_name, email, enrollment_date) VALUES ('" + first_name + "', '" + last_name + "', '" + email + "', '" + enrollment_date + "');";
 
-    W.exec(sql);
+    result R = W.exec(sql);
+
+    // Check if the query affected any rows
+    if (R.affected_rows() == 0) {
+        cout << "Failed to add student." << endl;
+    } else {
+        cout << "Record created successfully." << endl;
+    }
+
     W.commit();
-    cout << "Records created successfully" << endl;
 }
 
 // Function to update the email address for a student with the specified student_id
@@ -80,9 +88,16 @@ void updateStudentEmail(connection *C) {
     /* Format the SQL query */
     string sql = "UPDATE students set email = '" + new_email + "' where student_id = " + to_string(student_id) + ";";
 
-    W.exec(sql);
+    result R = W.exec(sql);
+
+    // Check if the query affected any rows
+    if (R.affected_rows() == 0) {
+        cout << "Failed to find student with ID " << student_id << "." << endl;
+    } else {
+        cout << "Email updated successfully." << endl;
+    }
+
     W.commit();
-    cout << "Email updated successfully" << endl;
 }
 
 // Function to delete the record of the student with the specified student_id
@@ -96,9 +111,16 @@ void deleteStudent(connection *C) {
     /* Format the SQL query */
     string sql = "DELETE from students where student_id = " + to_string(student_id) + ";";
 
-    W.exec(sql);
+    result R = W.exec(sql);
+
+    // Check if the DELETE query affected any rows
+    if (R.affected_rows() == 0) {
+        cout << "Failed to find and delete student with ID " << student_id << "." << endl;
+    } else {
+        cout << "Record deleted successfully." << endl;
+    }
+
     W.commit();
-    cout << "Record deleted successfully" << endl;
 }
 
 int main(int argc, char* argv[]) {
